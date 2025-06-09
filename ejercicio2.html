@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 2 - Enfriamiento de una Bebida Caliente</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.1/math.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1 class="page-title">Ejercicio 2: Enfriamiento de una Bebida Caliente (Ley de Newton del Enfriamiento)</h1>
+    </header>
+    <nav class="main-menu">
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="ejercicio1.html">Ejercicio 1</a></li>
+            <li><a href="ejercicio2.html" class="active">Ejercicio 2</a></li>
+            <li><a href="ejercicio3.html">Ejercicio 3</a></li>
+            <li><a href="resultados.html">Resultados</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+
+        <section class="enunciado">
+            <h2>Contexto:</h2>
+            <p>
+                Sofía calienta su café a 90°C y lo deja reposar en una habitación con temperatura constante de 20°C.
+                La velocidad de enfriamiento de la bebida obedece la ley de enfriamiento de Newton:
+            </p>
+            <p style="text-align:center;">\[ \frac{dT}{dt} = -k(T - T_{amb}) \]</p>
+            <p>
+                donde:
+                <ul>
+                    <li>\( T(t) \): temperatura del café en el tiempo \( t \) (minutos),</li>
+                    <li>\( T_{amb} = 20^\circ C \): temperatura ambiente,</li>
+                    <li>\( k = 0.1 \): constante de enfriamiento específica del café.</li>
+                </ul>
+            </p>
+
+            <h2>Datos:</h2>
+            <ul>
+                <li>Condición inicial: \( T(0) = 90^\circ C \)</li>
+                <li>Intervalo de tiempo: desde \( t = 0 \) hasta \( t = 5 \) minutos</li>
+                <li>Paso: \( h = 0.5 \)</li>
+            </ul>
+
+            <h2>Pregunta:</h2>
+            <p>
+                Calcula la temperatura del café para \( t = 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5\) minutos usando los métodos numéricos de <strong>Euler</strong>,
+                <strong>Heun</strong> y <strong>Runge-Kutta de 4to orden</strong>.
+                Compara los resultados con la solución exacta si se desea.
+            </p>
+        </section>
+
+        <hr style="margin: 40px 0;">
+
+        <div class="generic-ode-solver-section">
+            <h2>Resolver EDO:</h2>
+            <p>Ingresa los parámetros de la EDO y selecciona un método.</p>
+
+            <div class="input-group">
+                <label for="f_ty-gen">y'(x) = f(x, y):</label>
+                <input type="text" id="f_ty-gen" placeholder="Ej: 0.5*y - 20" value="-0.1 * (y - 20)">
+            </div>
+            <div class="input-group">
+                <label for="x0-gen">x0 (valor inicial de x/t):</label>
+                <input type="number" id="x0-gen" step="any" value="0">
+            </div>
+            <div class="input-group">
+                <label for="y0-gen">y0 (valor inicial de y/T):</label>
+                <input type="number" id="y0-gen" step="any" value="90">
+            </div>
+            <div class="input-group">
+                <label for="h-gen">h (tamaño de paso):</label>
+                <input type="number" id="h-gen" step="any" value="0.5">
+            </div>
+            <div class="input-group">
+                <label for="x_end-gen">x_final (valor final de x/t):</label>
+                <input type="number" id="x_end-gen" step="any" value="5">
+            </div>
+
+            <div class="input-group">
+                <label for="metodo">Seleccionar Método:</label>
+                <select id="metodo" onchange="actualizarBotonResolver()">
+                    <option value="">-- Seleccione un método --</option>
+                    <option value="euler">Método de Euler</option>
+                    <option value="heun">Método de Heun</option>
+                    <option value="runge_kutta">Método de Runge-Kutta de 4to Orden</option>
+                </select>
+            </div>
+
+            <div class="resolver-buttons">
+                <button id="btnResolver" class="hidden" onclick="resolverGenerico()">Resolver</button>
+            </div>
+        </div>
+
+        <hr style="margin: 40px 0;">
+
+        <div id="results-container-gen">
+            <div id="eulerResults-gen" class="results-section-gen hidden">
+                <h2>Resultados del Método de Euler</h2>
+                <div class="table-container">
+                    <table id="eulerTable-gen" class="results-table">
+                        <thead>
+                            <tr>
+                                <th>i</th><th>t (min)</th><th>T (°C)</th><th>h</th><th>dT/dt</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="chart-container">
+                    <canvas id="eulerChart-gen"></canvas>
+                </div>
+            </div>
+
+            <div id="heunResults-gen" class="results-section-gen hidden">
+                <h2>Resultados del Método de Heun</h2>
+                <div class="table-container">
+                    <table id="heunTable-gen" class="results-table">
+                        <thead>
+                            <tr>
+                                <th>#</th><th>t (min)</th><th>T (°C)</th><th>h</th><th>k1</th><th>t+h</th><th>T+k1h</th><th>k2</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="chart-container">
+                    <canvas id="heunChart-gen"></canvas>
+                </div>
+            </div>
+
+            <div id="rk4Results-gen" class="results-section-gen hidden">
+                <h2>Resultados del Método de Runge-Kutta de 4to Orden</h2>
+                <div class="table-container">
+                    <table id="rk4Table-gen" class="results-table">
+                        <thead>
+                            <tr>
+                                <th>#</th><th>t (min)</th><th>T (°C)</th><th>h</th><th>K1</th><th>tK1</th><th>TK1</th>
+                                <th>K2</th><th>tK2</th><th>TK2</th><th>K3</th><th>tK3</th><th>TK3</th><th>K4</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="chart-container">
+                    <canvas id="rk4Chart-gen"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/ode_solver.js"></script>
+</body>
+</html>

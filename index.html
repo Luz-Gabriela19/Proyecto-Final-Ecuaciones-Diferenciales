@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métodos Numéricos para EDOs</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.1/math.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1 class="page-title">Métodos Numéricos para Ecuaciones Diferenciales Ordinarias</h1>
+    </header>
+    <nav class="main-menu">
+        <ul>
+            <li><a href="ejercicio1.html">Ejercicio 1</a></li>
+            <li><a href="ejercicio2.html">Ejercicio 2</a></li>
+            <li><a href="ejercicio3.html">Ejercicio 3</a></li>
+            <li><a href="resultados.html">Resultados</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+
+        <div class="generic-ode-solver-section">
+            <h2>Resolver una EDO Genérica:</h2>
+            <p>Ingresa los parámetros de tu EDO, selecciona un método y haz clic en "Resolver".</p>
+
+            <div class="input-group">
+                <label for="f_ty-gen">y'(x) = f(x, y):</label>
+                <input type="text" id="f_ty-gen" placeholder="Ej: 0.5*y - 20 o x*y - sin(x)">
+            </div>
+            <div class="input-group">
+                <label for="x0-gen">x0 (valor inicial de x):</label>
+                <input type="number" id="x0-gen" step="any" placeholder="Ej: 0">
+            </div>
+            <div class="input-group">
+                <label for="y0-gen">y0 (valor inicial de y):</label>
+                <input type="number" id="y0-gen" step="any" placeholder="Ej: 30">
+            </div>
+            <div class="input-group">
+                <label for="h-gen">h (tamaño de paso):</label>
+                <input type="number" id="h-gen" step="any" placeholder="Ej: 1">
+            </div>
+            <div class="input-group">
+                <label for="x_end-gen">x_final (valor final de x):</label>
+                <input type="number" id="x_end-gen" step="any" placeholder="Ej: 5">
+            </div>
+
+            <div class="input-group">
+                <label for="metodo">Seleccionar Método:</label>
+                <select id="metodo" onchange="actualizarBotonResolver()">
+                    <option value="">-- Seleccione un método --</option>
+                    <option value="euler">Método de Euler</option>
+                    <option value="heun">Método de Heun</option>
+                    <option value="runge_kutta">Método de Runge-Kutta de 4to Orden</option>
+                </select>
+            </div>
+
+            <div class="resolver-buttons">
+                <button id="btnResolver" class="hidden" onclick="resolverGenerico()">Resolver</button>
+            </div>
+        </div>
+
+        <hr style="margin: 40px 0;">
+
+        <div id="results-container-gen">
+            <div id="eulerResults-gen" class="results-section-gen hidden">
+                <h2>Resultados del Método de Euler (Genérico)</h2>
+                <div class="table-container">
+                    <table id="eulerTable-gen" class="results-table">
+                        <thead>
+                            <tr>
+                                <th>i</th>
+                                <th>x</th>
+                                <th>y</th>
+                                <th>h</th>
+                                <th>f(x,y)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="chart-container">
+                    <canvas id="eulerChart-gen"></canvas>
+                </div>
+            </div>
+
+            <div id="heunResults-gen" class="results-section-gen hidden">
+                <h2>Resultados del Método de Heun (Genérico)</h2>
+                <div class="table-container">
+                    <table id="heunTable-gen" class="results-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>x</th>
+                                <th>y</th>
+                                <th>h</th>
+                                <th>k1 = f(x,y)</th>
+                                <th>x+h</th>
+                                <th>y+k1h</th>
+                                <th>k2 = f(x+h, y+k1h)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="chart-container">
+                    <canvas id="heunChart-gen"></canvas>
+                </div>
+            </div>
+
+            <div id="rk4Results-gen" class="results-section-gen hidden">
+                <h2>Resultados del Método de Runge-Kutta de 4to Orden (Genérico)</h2>
+                <div class="table-container">
+                    <table id="rk4Table-gen" class="results-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>x</th>
+                                <th>y</th>
+                                <th>h</th>
+                                <th>K1=f(x,y)</th>
+                                <th>xK1=x+(1/2)*h</th>
+                                <th>yK1=y+(1/2)*K1*h</th>
+                                <th>K2=f(xk1,yk1)</th>
+                                <th>xK2=x+(1/2)*h</th>
+                                <th>yK2=y+(1/2)*k2*h</th>
+                                <th>K3=f(xk2,yk2)</th>
+                                <th>xK3=x+h</th>
+                                <th>yK3=y+k3*h</th>
+                                <th>K4=f(xk3,yk3)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="chart-container">
+                    <canvas id="rk4Chart-gen"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <hr style="margin: 40px 0;">
+
+        <h2>Método de Euler</h2>
+        <p>
+            El método de Euler es una técnica básica de aproximación que utiliza la pendiente en un punto para avanzar una cantidad \( h \).
+        </p>
+        <ul>
+            <li>\( y_1 = y_0 + f(x_0, y_0) \cdot h \)</li>
+            <li>\( y_2 = y_1 + f(x_1, y_1) \cdot h \)</li>
+        </ul>
+
+        <h2>Método de Heun (Euler Mejorado)</h2>
+        <p>
+            Heun mejora a Euler promediando dos pendientes:
+        </p>
+        <ul>
+            <li>\( k_1 = f(x_i, y_i) \)</li>
+            <li>\( y_{i+1}^{(p)} = y_i + h \cdot k_1 \)</li>
+            <li>\( k_2 = f(x_i + h, y_{i+1}^{(p)}) \)</li>
+            <li>\( y_{i+1} = y_i + \frac{h}{2}(k_1 + k_2) \)</li>
+        </ul>
+
+        <h2>Método de Runge-Kutta de 4º Orden (RK4)</h2>
+        <p>
+            Runge-Kutta de cuarto orden utiliza un promedio ponderado de cuatro pendientes para máxima precisión:
+        </p>
+        <ul>
+            <li>\( k_1 = f(x_i, y_i) \)</li>
+            <li>\( k_2 = f(x_i + \frac{h}{2}, y_i + \frac{h}{2}k_1) \)</li>
+            <li>\( k_3 = f(x_i + \frac{h}{2}, y_i + \frac{h}{2}k_2) \)</li>
+            <li>\( k_4 = f(x_i + h, y_i + h k_3) \)</li>
+            <li>\( y_{i+1} = y_i + \frac{h}{6} (k_1 + 2k_2 + 2k_3 + k_4) \)</li>
+        </ul>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/ode_solver.js"></script>
+
+</body>
+</html>

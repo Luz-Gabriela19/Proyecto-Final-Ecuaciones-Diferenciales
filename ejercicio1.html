@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 1 - Contaminación en un Lago</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.1/math.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1 class="page-title">Ejercicio 1: Contaminación en un Lago (Ecología Ambiental)</h1>
+    </header>
+    <nav class="main-menu">
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="ejercicio1.html" class="active">Ejercicio 1</a></li>
+            <li><a href="ejercicio2.html">Ejercicio 2</a></li>
+            <li><a href="ejercicio3.html">Ejercicio 3</a></li>
+            <li><a href="resultados.html">Resultados</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+
+        <section class="enunciado">
+            <h2>Contexto:</h2>
+            <p>
+                En un lago cercano a una zona industrial, se ha detectado un aumento en la concentración de contaminantes.
+                Un estudio ambiental indica que la acumulación de contaminantes en el agua sigue la ecuación:
+            </p>
+            <p style="text-align:center;">\[ \frac{dP}{dt} = 0.5P - 20 \]</p>
+            <p>
+                donde:
+                <ul>
+                    <li>\( P(t) \): cantidad de contaminante en el lago (mg/L) en el tiempo \( t \) (días),</li>
+                    <li>\( 0.5P \): efecto de residuos acumulados,</li>
+                    <li>\( -20 \): efecto del sistema de purificación natural.</li>
+                </ul>
+            </p>
+
+            <h2>Datos:</h2>
+            <ul>
+                <li>Condición inicial: \( P(0) = 30 \) mg/L</li>
+                <li>Intervalo: desde \( t = 0 \) hasta \( t = 5 \) días</li>
+                <li>Paso: \( h = 0.5 \)</li>
+            </ul>
+
+            <h2>Pregunta:</h2>
+            <p>
+                Utiliza los métodos de <strong>Euler</strong>, <strong>Heun</strong> y <strong>Runge-Kutta de cuarto orden</strong>
+                para estimar la concentración de contaminantes en el lago para \( t = 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5\).
+                Presenta los resultados en una tabla y compara las diferencias entre métodos.
+            </p>
+        </section>
+
+        <hr style="margin: 40px 0;">
+
+        <div class="generic-ode-solver-section">
+            <h2>Resolver EDO:</h2>
+            <p>Ingresa los parámetros de la EDO y selecciona un método.</p>
+
+            <div class="input-group">
+                <label for="f_ty-gen">y'(x) = f(x, y):</label>
+                <input type="text" id="f_ty-gen" placeholder="Ej: 0.5*y - 20" value="0.5*y - 20">
+            </div>
+            <div class="input-group">
+                <label for="x0-gen">x0 (valor inicial de x):</label>
+                <input type="number" id="x0-gen" step="any" value="0">
+            </div>
+            <div class="input-group">
+                <label for="y0-gen">y0 (valor inicial de y):</label>
+                <input type="number" id="y0-gen" step="any" value="30">
+            </div>
+            <div class="input-group">
+                <label for="h-gen">h (tamaño de paso):</label>
+                <input type="number" id="h-gen" step="any" value="0.5">
+            </div>
+            <div class="input-group">
+                <label for="x_end-gen">x_final (valor final de x):</label>
+                <input type="number" id="x_end-gen" step="any" value="5">
+            </div>
+
+            <div class="input-group">
+                <label for="metodo">Seleccionar Método:</label>
+                <select id="metodo" onchange="actualizarBotonResolver()">
+                    <option value="">-- Seleccione un método --</option>
+                    <option value="euler">Método de Euler</option>
+                    <option value="heun">Método de Heun</option>
+                    <option value="runge_kutta">Método de Runge-Kutta de 4to Orden</option>
+                </select>
+            </div>
+
+            <div class="resolver-buttons">
+                <button id="btnResolver" class="hidden" onclick="resolverGenerico()">Resolver</button>
+            </div>
+        </div>
+
+        <hr style="margin: 40px 0;">
+
+        <div id="results-container-gen">
+            <div id="eulerResults-gen" class="results-section-gen hidden">
+                <h2>Resultados del Método de Euler</h2>
+                <div class="table-container">
+                    <table id="eulerTable-gen" class="results-table">
+                        <thead>
+                            <tr>
+                                <th>i</th><th>x</th><th>y</th><th>h</th><th>f(x,y)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="chart-container">
+                    <canvas id="eulerChart-gen"></canvas>
+                </div>
+            </div>
+
+            <div id="heunResults-gen" class="results-section-gen hidden">
+                <h2>Resultados del Método de Heun</h2>
+                <div class="table-container">
+                    <table id="heunTable-gen" class="results-table">
+                        <thead>
+                            <tr>
+                                <th>#</th><th>x</th><th>y</th><th>h</th><th>k1</th><th>x+h</th><th>y+k1h</th><th>k2</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="chart-container">
+                    <canvas id="heunChart-gen"></canvas>
+                </div>
+            </div>
+
+            <div id="rk4Results-gen" class="results-section-gen hidden">
+                <h2>Resultados del Método de Runge-Kutta de 4to Orden</h2>
+                <div class="table-container">
+                    <table id="rk4Table-gen" class="results-table">
+                        <thead>
+                            <tr>
+                                <th>#</th><th>x</th><th>y</th><th>h</th><th>K1</th><th>xK1</th><th>yK1</th>
+                                <th>K2</th><th>xK2</th><th>yK2</th><th>K3</th><th>xK3</th><th>yK3</th><th>K4</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="chart-container">
+                    <canvas id="rk4Chart-gen"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/ode_solver.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados Comparativos - Ejercicios EDO</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <h1 class="page-title">Resultados Comparativos de los Ejercicios</h1>
+    </header>
+    <nav class="main-menu">
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="ejercicio1.html">Ejercicio 1</a></li>
+            <li><a href="ejercicio2.html">Ejercicio 2</a></li>
+            <li><a href="ejercicio3.html">Ejercicio 3</a></li>
+            <li><a href="resultados.html" class="active">Resultados</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+
+        <section class="comparative-table-section">
+            <h2>Tabla Comparativa de Resultados Finales</h2>
+            <p>Esta tabla muestra la estimación final (en t_final) de cada método para cada ejercicio.</p>
+            <div class="table-container">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Ejercicio</th>
+                            <th>Método de Euler (Valor Final)</th>
+                            <th>Método de Heun (Valor Final)</th>
+                            <th>Método de Runge-Kutta 4to Orden (Valor Final)</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ejercicio 1: Contaminación en un Lago (t=5 días)</td>
+                            <td>-53.132257 mg/L</td>
+                            <td>-79.217163 mg/L</td>
+                            <td>-81.816885 mg/L</td>
+                        </tr>
+                        <tr>
+                            <td>Ejercicio 2: Enfriamiento de Café (t=5 min)</td>
+                            <td>61.911586 °C</td>
+                            <td>62.466331 °C</td>
+                            <td>62.457147 °C</td>
+                        </tr>
+                        <tr>
+                            <td>Ejercicio 3: Crecimiento de Conejos (t=10 días)</td>
+                            <td>473.297521 conejos</td>
+                            <td>470.682680 conejos</td>
+                            <td>471.411340 conejos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <hr style="margin: 40px 0;">
+
+        <section class="charts-section">
+            <h2>Gráficos Comparativos por Ejercicio</h2>
+
+            <div class="chart-container">
+                <h3>Ejercicio 1: Contaminación en un Lago</h3>
+                <canvas id="chartEjercicio1"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>Ejercicio 2: Enfriamiento de una Bebida Caliente</h3>
+                <canvas id="chartEjercicio2"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>Ejercicio 3: Crecimiento de Conejos en una Granja</h3>
+                <canvas id="chartEjercicio3"></canvas>
+            </div>
+        </section>
+
+        <hr style="margin: 40px 0;">
+
+        <section class="conclusions-section">
+            <h2>Conclusiones por Ejercicio</h2>
+
+            <h3>Ejercicio 1: Contaminación en un Lago</h3>
+            <p>
+                Los resultados indican que la concentración de contaminantes en el lago aumenta significativamente durante los primeros días y se estabiliza o incluso disminuye posteriormente,
+                dependiendo del método numérico utilizado. Según el método de Runge-Kutta de 4to orden, que es el más preciso, la concentración alcanza aproximadamente <strong>-81.82 mg/L</strong> aprox. al quinto día. 
+                Este valor contrasta con el de Euler (<strong>-53.13 mg/L</strong>), que subestima la acumulación de contaminantes debido a su simplicidad. 
+                Heun ofrece un valor intermedio. En términos ambientales, esto significa que el sistema natural de purificación sí tiene efecto, pero no es suficiente para contrarrestar el aumento inicial provocado por la contaminación. 
+                Por lo tanto, los métodos más precisos revelan una situación menos alarmante que Euler, pero igual preocupante: la contaminación persiste, aunque desacelerada.
+            </p>
+
+            <h3>Ejercicio 2: Enfriamiento de una Bebida Caliente</h3>
+            <p>
+                Se observa que la bebida, inicialmente a <strong>90 °C</strong>, se enfría rápidamente durante los primeros minutos y se aproxima a la temperatura ambiente de <strong>20 °C</strong>. 
+                Según los resultados del método de Runge-Kutta de 4to orden, al cabo de 5 minutos, la bebida alcanza una temperatura de aproximadamente <strong>62.46 °C</strong> aproximadamente. 
+                Euler ofrece una estimación inferior de <strong>61.91°C</strong>, mientras que Heun se aproxima más a RK4 con <strong>62.47°C</strong>. 
+                Esto confirma que el proceso de enfriamiento sigue un comportamiento exponencial decreciente, como predice la ley de enfriamiento de Newton. 
+                El método de Runge-Kutta proporciona una estimación más realista del estado de la bebida, útil si se desea conocer el momento óptimo para consumirla sin quemarse.
+            </p>
+
+            <h3>Ejercicio 3: Crecimiento de Conejos en una Granja</h3>
+            <p>
+                Los resultados muestran un crecimiento poblacional de los conejos que se ralentiza conforme se acerca al límite ambiental de <strong>500 conejos</strong>. 
+                Según el método de Runge-Kutta de 4to orden, al día 10, la población alcanza aproximadamente <strong>471 conejos</strong>, reflejando un crecimiento cercano a la capacidad máxima. 
+                El método de Euler, sin embargo, subestima la población con un valor de <strong>473 conejos</strong>, mientras que Heun se mantiene cercano a RK4 con <strong>470 conejos</strong>. 
+                Esta diferencia destaca la importancia de utilizar métodos numéricos precisos al modelar sistemas biológicos, especialmente cuando se gestionan recursos como el alimento o el espacio. 
+                Una mala estimación puede llevar a decisiones ineficientes o a sobrepoblación no anticipada.
+            </p>
+        </section>
+
+
+    </main>
+
+    <script>
+        // Data for Exercise 1: Contamination in a Lake
+        // P(t) = 0.5P - 20, P(0) = 30, h = 0.5, t_end = 5
+        const ej1_euler_x = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+        const ej1_euler_y = [30.000000, 27.500000, 24.375000, 20.468750, 15.585938, 9.482422, 1.853027, -7.683716, -19.604645, -34.505806, -53.132257]; // Recalculated values from provided equation
+        const ej1_heun_y = [30.000000, 27.187500, 23.583984, 18.966980, 13.051443, 5.472161, -4.238793, -16.680954, -32.622472, -53.047542, -79.217163]; // Re-estimated values
+        const ej1_rk4_y = [30.000000, 27.159831, 23.513005, 18.830420, 12.817901, 5.097724, -4.815113, -17.543363, -33.886653, -54.871713, 	-81.816885]; // Re-estimated values
+
+
+        // Data for Exercise 2: Coffee Cooling
+        // dT/dt = -0.1(T - 20), T(0) = 90, h = 0.5, t_end = 5
+        const ej2_euler_x = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+        const ej2_euler_y = [90.000000, 86.500000, 83.175000, 80.016250, 77.015438, 74.164666, 71.456432, 68.883611, 66.439430, 64.117459, 61.911586]; // Re-estimated values
+        const ej2_heun_y = [90.000000, 86.587500, 83.341359, 80.253468, 77.316112, 74.521951, 71.864006, 69.335636, 66.930523, 64.642660, 62.466331]; // Re-estimated values
+        const ej2_rk4_y = [90.000000, 86.586060, 83.338620, 80.249559, 77.311153, 74.516056, 71.857276, 69.328167, 66.922404, 64.633972, 62.457147]; // Re-estimated values
+
+        // Data for Exercise 3: Rabbit Growth
+        // dN/dt = 0.5N(1 - N/500), N(0) = 50, h = 0.5, t_end = 10
+        const ej3_euler_x = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10];
+        const ej3_euler_y = [50.000000, 61.250000, 74.686719, 90.569345, 109.110279, 130.435322, 154.537466, 181.230918, 210.116325, 240.570971, 271.776518, 302.789409, 332.646048, 360.480864, 385.627853, 407.680396, 426.498842, 442.172922, 454.957706, 465.203875, 473.297521]; // Re-estimated values
+        const ej3_heun_y = [50.000000, 62.343359, 77.219375, 94.886375, 115.504538, 139.080021, 165.412874, 194.064310, 224.359843, 255.438516, 286.344881, 316.144590, 344.034718, 369.422093, 391.955659, 411.514961, 428.168244, 442.117222, 453.642661, 463.059219, 470.682680]; // Re-estimated values
+        const ej3_rk4_y = [50.000000, 62.427944, 77.413582, 95.213771, 115.983571, 139.720257, 166.212237, 195.008498, 225.424442, 256.593224, 287.558235, 317.387474, 345.281822, 370.651704, 393.148869, 412.655186, 429.241360, 443.112089, 454.551619, 463.878283, 471.411340]; // Re-estimated values
+
+        function createComparativeChart(canvasId, title, labels, dataEuler, dataHeun, dataRK4, yAxisLabel) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Método de Euler',
+                            data: dataEuler,
+                            borderColor: 'rgb(255, 99, 132)',
+                            tension: 0.1,
+                            fill: false
+                        },
+                        {
+                            label: 'Método de Heun',
+                            data: dataHeun,
+                            borderColor: 'rgb(54, 162, 235)',
+                            tension: 0.1,
+                            fill: false
+                        },
+                        {
+                            label: 'Método de Runge-Kutta 4to Orden',
+                            data: dataRK4,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: title
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Tiempo (días/min)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: yAxisLabel
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createComparativeChart(
+                'chartEjercicio1',
+                'Ejercicio 1: Contaminación en un Lago',
+                ej1_euler_x,
+                ej1_euler_y,
+                ej1_heun_y,
+                ej1_rk4_y,
+                'Contaminante (mg/L)'
+            );
+
+            createComparativeChart(
+                'chartEjercicio2',
+                'Ejercicio 2: Enfriamiento de una Bebida Caliente',
+                ej2_euler_x,
+                ej2_euler_y,
+                ej2_heun_y,
+                ej2_rk4_y,
+                'Temperatura (°C)'
+            );
+
+            createComparativeChart(
+                'chartEjercicio3',
+                'Ejercicio 3: Crecimiento de Conejos en una Granja',
+                ej3_euler_x,
+                ej3_euler_y,
+                ej3_heun_y,
+                ej3_rk4_y,
+                'Número de Conejos'
+            );
+        });
+    </script>
+</body>
+</html>
